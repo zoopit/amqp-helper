@@ -1,0 +1,17 @@
+{
+  "name": "amqp-helper",
+  "version": "0.0.1",
+  "description": "Helper functions for AMQP",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "trygve@grimnes.org",
+  "license": "ISC",
+  "dependencies": {
+    "zlog": "^1.0.0"
+  },
+  "devDependencies": {
+    "should": "^6.0.3"
+  }
+}
