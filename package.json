@@ -9,6 +9,7 @@
   "author": "trygve@grimnes.org",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.4.0",
     "zlog": "^1.0.0"
   },
   "devDependencies": {
