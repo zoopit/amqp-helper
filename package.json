@@ -1,6 +1,6 @@
 {
   "name": "amqp-helper",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Helper functions for AMQP",
   "main": "src/index.js",
   "scripts": {
