@@ -58,7 +58,7 @@ module.exports = {
 						}
 						var options = { replyTo : queueIn , correlationId : correlationId }
 						zlog.info ( 'Sending to queue' , { queue : queueOut , options : options } )
-						ch.sendToQueue( queueOut , new Buffer( body ) ,  options )
+						ch.sendToQueue( queueOut , new Buffer( JSON.stringify( body ) ) ,  options )
 					});					
 				});
 			});
