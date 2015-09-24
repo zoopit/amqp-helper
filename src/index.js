@@ -1,7 +1,54 @@
+var amqp     = require( 'amqplib/callback_api' )
 var ZLog     = require( 'zlog' )
 var zlog     = new ZLog()
 
+
 module.exports = {
+
+	connect : function( uri , callback ){
+		amqp.connect( uri , callback )
+	},
+
+	sendWithResponseQueueNew : function( connection , queueOut , queueIn , body , callback ){
+		zlog.info( 'subscribe' , { queue : queueIn } )
+
+		var queueOptions = {
+			autoDelete : true
+		}
+
+		var correlationId = new Date().getTime().toString()
+		var ctag = null
+
+
+		connection.createChannel( function( err , ch ){
+			if( err )
+				return callback ( err )
+			ch.assertQueue( queueIn , { durable : true  },  function( err , ok ){
+				if( err )
+					return callback( err )
+				
+				ch.consume( queueIn , function( msg ){
+					if( msg.properties.correlationId != correlationId )
+						return
+					
+					ch.cancel( ctag )
+					
+					return callback( null , JSON.parse( msg.content.toString() ) )
+					
+				}, { noAck : true } , function( err , ok ){
+					if( err )
+						callback( err )
+					
+					ctag = ok.consumerTag
+					
+					ch.assertQueue( queueOut , { durable : false , autoDelete :  true }  , function( err , ok ){
+						ch.sendToQueue( queueOut , new Buffer( body ) , { replyTo : queueIn , correlationId : correlationId } )
+					});
+					
+				});
+			});
+		});
+	},
 	/*
 	 * Sends message to exclusive Out queue.
 	 * Creates listener on In queue
