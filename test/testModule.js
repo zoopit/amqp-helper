@@ -9,4 +9,10 @@ describe( 'Module' , function() {
 		done()
 	})
 
+
+    	it( 'Should have function sendWithResponseQueueNew' , function( done ){
+		helper.should.have.property('sendWithResponseQueueNew')
+		done()
+	})
+
 })
