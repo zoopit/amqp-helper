@@ -27,7 +27,7 @@ module.exports = {
 				return callback ( err )
 			}
 			zlog.info( 'Channel created' )
-			ch.assertQueue( queueIn , { durable : true  },  function( err , ok ){
+			ch.assertQueue( queueIn , { durable : false , autoDelete : true  },  function( err , ok ){
 				if( err ){
 					zlog.error( 'Unable to assert queue' , { queue : queueIn } )
 					return callback( err )
