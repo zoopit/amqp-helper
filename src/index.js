@@ -17,9 +17,10 @@ module.exports = {
 		}
 		
 		var correlationId = new Date().getTime().toString()
+		var queueInExclusive = queueIn + correlationId
 		var ctag = null
 		
-		zlog.info( 'subscribe' , { queue : queueIn , options : queueOptions } )
+		zlog.info( 'subscribe' , { queue : queueInExclusive , options : queueOptions } )
 
 		connection.createChannel( function( err , ch ){
 			if( err ){
@@ -27,24 +28,32 @@ module.exports = {
 				return callback ( err )
 			}
 			zlog.info( 'Channel created' )
-			ch.assertQueue( queueIn , { durable : false , autoDelete : true  },  function( err , ok ){
+			ch.assertQueue( queueInExclusive , { exclusive : true , durable : false , autoDelete : true  },  function( err , ok ){
 				if( err ){
-					zlog.error( 'Unable to assert queue' , { queue : queueIn } )
+					zlog.error( 'Unable to assert queue' , { queue : queueInExclusive } )
 					return callback( err )
 				}
 				
-				ch.consume( queueIn , function( msg ){					
+				ch.consume( queueInExclusive , function( msg ){					
 					if( msg.properties.correlationId != correlationId )
 						return
 
 					zlog.info ( 'Response received, clearing ctag', { ctag : ctag } )
-					ch.cancel( ctag )
+					ch.deleteQueue( queueInExclusive , {} , function( err , ok ){
+						if( err ){
+							zlog.error( 'Unable to delete queue', { queue : queueInExclusive } )
+							return callback( err )
+						}
+						zlog.info( 'Closed channel'  , { queue : queueInExclusive } )
+						ch.close()
+					})
+					
 					
 					return callback( null , JSON.parse( msg.content.toString() ) )
 					
 				}, { noAck : true } , function( err , ok ){
 					if( err ){
-						zlog.error( 'Unable to consume queue' , { queue : queueIn } )
+						zlog.error( 'Unable to consume queue' , { queue : queueInExclusive } )
 						callback( err )
 					}
 					ctag = ok.consumerTag
@@ -56,7 +65,7 @@ module.exports = {
 							zlog.error( 'Unable to assert queue' , { queue : queueOut } )
 							return callback( err )
 						}
-						var options = { replyTo : queueIn , correlationId : correlationId }
+						var options = { replyTo : queueInExclusive , correlationId : correlationId }
 						zlog.info ( 'Sending to queue' , { queue : queueOut , options : options } )
 						ch.sendToQueue( queueOut , new Buffer( JSON.stringify( body ) ) ,  options )
 					});					
