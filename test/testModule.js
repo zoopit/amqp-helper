@@ -8,11 +8,4 @@ describe( 'Module' , function() {
 		helper.should.have.property('sendWithResponseQueue')
 		done()
 	})
-
-
-    	it( 'Should have function sendWithResponseQueueNew' , function( done ){
-		helper.should.have.property('sendWithResponseQueueNew')
-		done()
-	})
-
 })
