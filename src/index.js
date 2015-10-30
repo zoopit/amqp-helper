@@ -34,11 +34,15 @@ module.exports = {
 					return callback( err )
 				}
 				
-				ch.consume( queueInExclusive , function( msg ){					
+				ch.consume( queueInExclusive , function( msg ){
+					if( !msg )
+						return
+					
 					if( msg.properties.correlationId != correlationId )
 						return
 
 					zlog.info ( 'Response received, clearing ctag', { ctag : ctag } )
+					
 					ch.deleteQueue( queueInExclusive , {} , function( err , ok ){
 						if( err ){
 							zlog.error( 'Unable to delete queue', { queue : queueInExclusive } )
