@@ -1,7 +1,11 @@
 var amqp     = require( 'amqplib/callback_api' )
 var ZLog     = require( 'zlog' )
 var zlog     = new ZLog()
+var util     = require( 'util' )
 
+function rand(max){
+	return parseInt(Math.random() * max )
+}
 
 module.exports = {
 
@@ -15,8 +19,8 @@ module.exports = {
 		var queueOptions = {
 			autoDelete : true
 		}
+		var correlationId = util.format( "%s%s", new Date().getTime().toString(),rand(1000) )
 		
-		var correlationId = new Date().getTime().toString()
 		var queueInExclusive = queueIn + correlationId
 		var ctag = null
 		
