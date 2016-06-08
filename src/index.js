@@ -28,7 +28,7 @@ module.exports = {
 		var ctag = null
 		
 		if( global.logger ){
-			global.logger-info( "AMQP response channel configured" ,{ queue : queueInExclusive , correlationId : correlationId} )
+			global.logger.info( "AMQP response channel configured" ,{ queue : queueInExclusive , correlationId : correlationId} )
 		}
 		
 		zlog.info( 'subscribe' , { queue : queueInExclusive , options : queueOptions } )
