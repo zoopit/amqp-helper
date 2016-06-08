@@ -19,11 +19,11 @@ module.exports = {
 		var queueOptions = {
 			autoDelete : true
 		}
-		var correlationId = util.format( "%s%s", new Date().getTime().toString(),rand(1000) )
+		var correlationId = util.format( "%s%s", new Date().getTime().toString(),rand(10000000000000) )
 		
 		var queueInExclusive = queueIn + correlationId
 		var ctag = null
-		
+
 		zlog.info( 'subscribe' , { queue : queueInExclusive , options : queueOptions } )
 
 		connection.createChannel( function( err , ch ){
