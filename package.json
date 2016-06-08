@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.4.0",
+    "sha1": "^1.1.1",
     "zlog": "^1.0.0"
   },
   "devDependencies": {
