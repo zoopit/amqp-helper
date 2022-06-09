@@ -1,19 +1,24 @@
 {
-  "name": "amqp-helper",
+  "name": "@zoopit/amqp-helper",
   "version": "2.0.5",
   "description": "Helper functions for AMQP",
   "main": "src/index.js",
   "scripts": {
+    "release": "semantic-release",
     "test": "mocha"
   },
   "author": "trygve@grimnes.org",
   "license": "ISC",
   "dependencies": {
+    "@types/amqplib": "^0.8.2",
     "amqplib": "^0.4.0",
     "sha1": "^1.1.1",
     "zlog": "^1.0.0"
   },
+  "types": "src/ts-support.d.ts",
   "devDependencies": {
+    "conventional-changelog-conventionalcommits": "^5.0.0",
+    "semantic-release": "^19.0.2",
     "should": "^6.0.3"
   }
 }
