@@ -1,24 +1,10 @@
 const amqp_helper = require('./index')
-
+const util = require('util')
 
 module.exports = {
 
-    connect: function(uri) {
-        return new Promise((resolve, reject) => {
-            amqp_helper.connect(uri, (err, conn) => {
-                if (err) reject(err)
-                resolve(conn)
-            })
-        })
-    },
+    connect: util.promisify(amqp_helper.connect),        
     
-    sendWithResponseQueue: function(connection, queueOut, queueIn, body) {
-        return new Promise((resolve, reject) => {
-            amqp_helper.sendWithResponseQueue(connection, queueOut, queueIn, body, (err, result) => {
-                if (err) reject(err)
-                resolve(result)
-            })
-        })
-    }
+    sendWithResponseQueue: util.promisify(amqp_helper.sendWithResponseQueue)
 
 }    
