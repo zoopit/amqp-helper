@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "release": "semantic-release",
-    "test": "mocha"
+    "test": "tsc src/ts-support.d.ts; mocha "
   },
   "author": "trygve@grimnes.org",
   "license": "ISC",
