@@ -14,6 +14,7 @@ jobs:
 
       - run: npm audit --audit-level=high
       - run: npm ci
+      - run: npm run test
         env:
           FURY_AUTH: ${{ secrets.FURY_AUTH_PULL }}
 
